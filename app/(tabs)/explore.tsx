@@ -41,18 +41,18 @@ const collaborators: Collaborator[] = [
     college: "AIT, Pune",
     year: "2027",
     github: "aayushyatiwari",
-    linkedin: "pavankumr",
+    linkedin: "aayushyatiwari11092004",
     image: "https://github.com/aayushyatiwari.png",
     contribution: "AI/ML"
   },
   {
-    name: "Abhishekh  Yadav",
+    name: "Abhishekh Yadav",
     role: "Designer",
     college: "AIT, Pune",
     year: "2026",
-    github: "",
-    linkedin: "pavankumr",
-    image: "https://github.com/.png",
+    github: "Abhishek01yadav",
+    linkedin: "abhisekh-yadav-6b7906252",
+    image: "https://github.com/Abhisekh01Yadav.png",
     contribution: "React native"
   },
   {
@@ -62,7 +62,7 @@ const collaborators: Collaborator[] = [
     year: "2027",
     github: "pavankumar07s",
     linkedin: "pavankumr",
-    image: "https://github.com/.png",
+    image: "https://github.com/sourav.png",
     contribution: "LOgic"
   },
   // Add other team members here
