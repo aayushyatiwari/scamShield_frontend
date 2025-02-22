@@ -1,0 +1,77 @@
+{
+  "expo": {
+    "name": "scamshield",
+    "slug": "scamshield",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "owner": "pavankumar_07s",
+    "icon": "./assets/images/logo.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "experiments": {
+      "typedRoutes": true
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pavankumar-07s.Scamshield",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Allow ScamShield to access your microphone to detect suspicious calls."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.pavankumar_07s.Scamshield",
+      "permissions": [
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "MEDIA_LIBRARY",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/logo.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-av",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow ScamShield to save recordings.",
+          "savePhotosPermission": "Allow ScamShield to save recordings.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      "@config-plugins/ffmpeg-kit-react-native"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2f29d637-cdd1-4bc8-9b41-354a6e40d19b"
+      },
+      "EXPO_PUBLIC_API_URL": "http://192.168.244.58:3000",
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}
