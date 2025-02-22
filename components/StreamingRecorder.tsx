@@ -8,6 +8,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withSequence, w
 export interface CallAnalysisType {
   suspicious: boolean;
   confidence: number;
+  sentiments: string;
   reasons: string[];
   detected_keywords: string[];
   history?: string[];
@@ -21,18 +22,25 @@ export function StreamingRecorder({ onAnalysisReceived }: Props) {
   const [isEnabled, setIsEnabled] = useState(false);
   const { isStreaming, startStreaming, stopStreaming, error } = useAudioStreaming(
     useCallback((analysis) => {
-      onAnalysisReceived(analysis);
+      console.log('Received streaming analysis:', analysis);
       
+      // Check if we have suspicious content and required fields
       if (analysis.suspicious) {
-        console.log('⚠️ Suspicious content detected:', {
-          confidence: analysis.confidence,
-          reasons: analysis.reasons,
-          keywords: analysis.detected_keywords
-        });
-      }
+        const formattedAnalysis: CallAnalysisType = {
+          suspicious: true,
+          confidence: analysis.confidence || 0,
+          sentiments: analysis.sentiments || 'Neutral',
+          reasons: analysis.reasons || [],
+          timestamps: analysis.timestamps?.map(t => ({
+            start: t.start,
+            end: t.end,
+            text: t.text,
+            type: t.type
+          })) || []
+        };
 
-      if (analysis.history?.length) {
-        console.log('📜 Analysis history:', analysis.history);
+        console.log('Passing formatted analysis to parent:', formattedAnalysis);
+        onAnalysisReceived(formattedAnalysis);
       }
     }, [onAnalysisReceived])
   );

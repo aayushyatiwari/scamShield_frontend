@@ -18,57 +18,56 @@ export default function HomeScreen() {
   const handleStreamingAnalysis = (streamAnalysis: Partial<CallAnalysisType>) => {
     if (streamAnalysis.suspicious) {
       // Add new alerts to the list
-      setStreamingAlerts(prev => [...prev, ...(streamAnalysis.reasons || [])]);
+      if (streamAnalysis.reasons) {
+        setStreamingAlerts(prev => [...prev, ...streamAnalysis.reasons]);
+      }
       
       // Show the analysis in the AlertDisplay
       setAnalysis({
         suspicious: true,
         confidence: streamAnalysis.confidence || 0.85,
+        sentiments: streamAnalysis.sentiments || 'Neutral',
         reasons: streamAnalysis.reasons || [],
-        timestamps: []
+        timestamps: streamAnalysis.timestamps || []
       });
     }
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-    <ScrollView style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}>
-    <ThemedView style={styles.container}>
-        <CallHeader />
-        
-        <StreamingRecorder 
-          onAnalysisReceived={handleStreamingAnalysis}
-        />
-           {/* <RealTimeAnalysis isActive={false} /> */}
-        
-        <CallRecorder 
-          isRecording={isRecording}
-          onRecordingStart={() => {
-            setIsRecording(true);
-            setStreamingAlerts([]);
-          }}
-          onRecordingStop={() => setIsRecording(false)}
-          onAnalysisReceived={setAnalysis}
-        />
-
-        {isRecording && (
-          <LiveAnalysis 
-            isActive={isRecording}
-            alerts={streamingAlerts}
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <ThemedView style={styles.container}>
+          <CallHeader />
+          
+          <StreamingRecorder 
+            onAnalysisReceived={handleStreamingAnalysis}
           />
-        )}
-
-        {analysis && !isRecording && (
-          <AlertDisplay 
-            analysis={analysis}
-            onDismiss={() => setAnalysis(null)}
+          
+          <CallRecorder 
+            isRecording={isRecording}
+            onRecordingStart={() => {
+              setIsRecording(true);
+              setStreamingAlerts([]);
+            }}
+            onRecordingStop={() => setIsRecording(false)}
+            onAnalysisReceived={setAnalysis}
           />
-        )}
-      </ThemedView>
 
-    </ScrollView>
-      
+          {isRecording && (
+            <LiveAnalysis 
+              isActive={isRecording}
+              alerts={streamingAlerts}
+            />
+          )}
+
+          {analysis && analysis.suspicious && (
+            <AlertDisplay 
+              analysis={analysis}
+              onDismiss={() => setAnalysis(null)}
+            />
+          )}
+        </ThemedView>
+      </ScrollView>
     </SafeAreaView>
   );
 }

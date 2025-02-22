@@ -1,6 +1,7 @@
 export interface CallAnalysisType {
   suspicious: boolean;
   confidence: number;
+  sentiments: string;
   reasons: string[];
   timestamps: TimestampType[];
 }

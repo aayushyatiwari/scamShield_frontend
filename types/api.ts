@@ -1,6 +1,7 @@
 export interface AnalysisResponse {
   suspicious: boolean;
   confidence: number;
+  sentiments: string;
   reasons: string[];
   timestamps: {
     start: number;
@@ -13,6 +14,7 @@ export interface AnalysisResponse {
 export interface StreamAnalysisResponse {
   suspicious: boolean;
   confidence: number;
+  sentiments: string;
   reasons: string[];
   currentTimestamp?: number;
   detectedKeywords?: string[];

@@ -30,6 +30,29 @@ export class StreamingAnalyzer {
     }
   }
 
+  private handleAnalysisResponse(response: any) {
+    try {
+      if (response.suspicious !== undefined) {
+        const analysis: Partial<CallAnalysisType> = {
+          suspicious: response.suspicious,
+          confidence: response.confidence,
+          sentiments: response.sentiments,
+          reasons: response.reasons,
+          timestamps: response.timestamps.map((t: any) => ({
+            start: t.start,
+            end: t.end,
+            text: t.text,
+            type: t.type as "otp" | "remote_access" | "social_engineering"
+          }))
+        };
+        
+        this.onAnalysisUpdate(analysis);
+      }
+    } catch (error) {
+      console.error('Error processing analysis response:', error);
+    }
+  }
+
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.shouldReconnect) return reject('Connection not allowed');
@@ -59,24 +82,8 @@ export class StreamingAnalyzer {
         this.ws.onmessage = (event) => {
           try {
             const response = JSON.parse(event.data);
-            console.log('Received analysis:', response);
-  
-            if (response.status === 'complete') {
-              const analysis: Partial<CallAnalysisType> = {
-                suspicious: response.suspicious,
-                confidence: response.ml_results.fraud_probability,
-                reasons: response.reasons,
-                detected_keywords: [], // Add if available in response
-                transcript: response.final_transcript,
-                ml_results: {
-                  sentiment: response.ml_results.sentiment,
-                  fraudProbability: response.ml_results.fraud_probability,
-                  classification: response.ml_results.fraud_classification
-                }
-              };
-  
-              this.onAnalysisUpdate(analysis);
-            }
+            console.log('Received WebSocket response:', response);
+            this.handleAnalysisResponse(response);
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);
           }

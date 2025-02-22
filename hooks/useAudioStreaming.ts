@@ -289,30 +289,28 @@ const processRecording = async (recording: Audio.Recording) => {
 
   const startStreaming = useCallback(async () => {
     try {
-      // Set streaming state first
       streamingRef.current = true;
       setIsStreaming(true);
       
-      // Initialize analyzer with WebSocket
       analyzerRef.current = new StreamingAnalyzer(
         (analysis) => {
-          console.log('📊 Received analysis:', analysis);
-          onAnalysisUpdate(analysis);
+          console.log('Received analysis:', analysis);
+          // Make sure sentiment is included in the update
+          onAnalysisUpdate({
+            ...analysis,
+            sentiments: analysis.sentiments || 'Neutral' // Provide default if missing
+          });
         },
         (error) => {
-          console.error('❌ Analyzer error:', error);
+          console.error('Analyzer error:', error);
           setError(error);
         }
       );
 
-      // Connect WebSocket
       await analyzerRef.current.connect();
-
-      // Start recording after WebSocket is connected
       await startRecording();
     } catch (err) {
       console.error('Failed to start streaming:', err);
-      // Reset states on error
       streamingRef.current = false;
       setIsStreaming(false);
       if (analyzerRef.current) {
